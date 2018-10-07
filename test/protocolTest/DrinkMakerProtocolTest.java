@@ -18,12 +18,13 @@ public class DrinkMakerProtocolTest {
 
     public DrinkMakerProtocolTest() {
     }
-
-    @BeforeClass
-    public static void setUpClass() {
+      
+    @Before
+    public void setUp() {
         dmp = new DrinkMakerProtocol();
-    }    
-
+    }
+    
+    // Iteration 1 tests
     @Test
     public void DrinkMakerProtocol_oneDrinkOneSugar_ExpectedStringFormat() {
         String result = dmp.order("tea", 1);
@@ -50,15 +51,31 @@ public class DrinkMakerProtocolTest {
     }
     
     
-    @AfterClass
-    public static void tearDownClass() {
+    // Iteration 2 tests
+    @Test
+    public void DrinkMakerProtocol_oneDrinkNotEnoughMoney_ExpectedMessageSend() {
+        float money = 0.1f;
+        dmp.insertMoney(money);
+        String result = dmp.order("tea", 1);
+        assertEquals("0.3 missing", result);
     }
+    
+    @Test
+    public void DrinkMakerProtocol_oneDrinkEnoughMoney_ExpectedOrderTaken() {
+        float money = 1.65f;
+        dmp.insertMoney(money);
+        String result = dmp.order("coffee", 0);
+        assertEquals("C::", result);
+    }
+    
+    
 
-    @Before
-    public void setUp() {
-    }
+    @BeforeClass
+    public static void setUpClass() {}    
+  
+    @AfterClass
+    public static void tearDownClass() {}
 
     @After
-    public void tearDown() {
-    }
+    public void tearDown() {}
 }
