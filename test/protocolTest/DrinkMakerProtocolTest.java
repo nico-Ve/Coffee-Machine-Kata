@@ -22,7 +22,7 @@ public class DrinkMakerProtocolTest {
 
     @Before
     public void setUp() {
-        dmp = new DrinkMakerProtocol();
+        dmp = new DrinkMakerProtocol();        
         dmp.getOptions().put("tea", new Drink("T", 0.4f));
         dmp.getOptions().put("chocolate", new Drink("H", 0.5f));
         dmp.getOptions().put("coffee", new Drink("C", 0.6f));
@@ -59,7 +59,14 @@ public class DrinkMakerProtocolTest {
         String result = dmp.sendMessage(content);
         assertEquals("M:" + content, result);
     }
+    
+    @Test
+    public void DrinkMakerProtocol_invaldDrinkAttempt_ExpectedNotAvailableMessage() {        
+        String result = dmp.order("coca cola", 0);
+        assertEquals("M:no drink available", result);
+    }
 
+    
     // Iteration 2 tests--------------------------------------------------------
     @Test
     public void DrinkMakerProtocol_oneDrinkNotEnoughMoney_ExpectedMessageSend() {
@@ -100,6 +107,7 @@ public class DrinkMakerProtocolTest {
         assertEquals("Ch:1:0", result);
     }
 
+    
     // Iteration 4 tests--------------------------------------------------------
     @Test
     public void DrinkMakerProtocol_oneDrinkTwoValidOrders_ExpectedValidReportingTotalDrink() {
@@ -116,6 +124,8 @@ public class DrinkMakerProtocolTest {
         assertEquals(1.2f, dmp.getReportingRepository().getTotalMoney(), 0.005);
     }
 
+    
+    
     @BeforeClass
     public static void setUpClass() {
     }

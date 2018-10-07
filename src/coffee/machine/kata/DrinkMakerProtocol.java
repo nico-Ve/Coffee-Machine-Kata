@@ -29,7 +29,10 @@ public class DrinkMakerProtocol {
     
     public String order(String optionName, int sugarAmout, boolean isExtraHot){
         Drink option = this.options.get(optionName);
-             
+        
+        if(option == null){
+            return sendMessage("no drink available");
+        }        
         if (this.money < option.getPrice()){
             String messageBody = (option.getPrice()-this.money)+ " missing";
             return sendMessage(messageBody);
