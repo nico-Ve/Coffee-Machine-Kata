@@ -22,6 +22,7 @@ public class DrinkMakerProtocolTest {
     @Before
     public void setUp() {
         dmp = new DrinkMakerProtocol();
+        dmp.setMoney(1.65f);
     }
     
     // Iteration 1 tests
@@ -53,19 +54,17 @@ public class DrinkMakerProtocolTest {
     
     // Iteration 2 tests
     @Test
-    public void DrinkMakerProtocol_oneDrinkNotEnoughMoney_ExpectedMessageSend() {
-        float money = 0.1f;
-        dmp.insertMoney(money);
+    public void DrinkMakerProtocol_oneDrinkNotEnoughMoney_ExpectedMessageSend() {        
+        dmp.setMoney(0.1f);
         String result = dmp.order("tea", 1);
-        assertEquals("0.3 missing", result);
-    }
+        assertEquals("M:0.3 missing", result);
+    }   
     
     @Test
-    public void DrinkMakerProtocol_oneDrinkEnoughMoney_ExpectedOrderTaken() {
-        float money = 1.65f;
-        dmp.insertMoney(money);
-        String result = dmp.order("coffee", 0);
-        assertEquals("C::", result);
+    public void DrinkMakerProtocol_oneDrinkEnoughMoney_ExpectedMoneyWithdraw() {
+        dmp.order("chocolate", 0);
+        float result = dmp.getMoney();
+        assertEquals(1.15f, result, 0);
     }
     
     

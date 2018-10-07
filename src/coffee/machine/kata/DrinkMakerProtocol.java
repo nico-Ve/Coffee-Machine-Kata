@@ -9,23 +9,31 @@ import java.util.HashMap;
  */
 public class DrinkMakerProtocol {
     
-    private HashMap<String, String> optionsMap;
+    private HashMap<String, Drink> optionsMap;
     private String messageCode;
     private char separator;
+    private float money;
 
     public DrinkMakerProtocol() {
         this.optionsMap = new HashMap();
-        this.optionsMap.put("tea", "T");
-        this.optionsMap.put("chocolate", "H");
-        this.optionsMap.put("coffee", "C");
+        this.optionsMap.put("tea", new Drink("T", 0.4f));
+        this.optionsMap.put("chocolate", new Drink("H", 0.5f));
+        this.optionsMap.put("coffee", new Drink("C", 0.6f));
         this.messageCode = "M";
         this.separator = ':';
     }
     
     public String order(String optionName, int sugarAmout){
-        StringBuilder instruction = new StringBuilder();
+        Drink option = this.optionsMap.get(optionName);
+        String optionCode = option.getCode();
+             
+        if (this.money < option.getPrice()){
+            String messageBody = (option.getPrice()-this.money)+ " missing";
+            return sendMessage(messageBody);
+        }
         
-        String optionCode = this.optionsMap.get(optionName);
+        setMoney(this.money-option.getPrice());
+        StringBuilder instruction = new StringBuilder();                
         instruction.append(optionCode).append(separator);
         
         if(sugarAmout <= 0){
@@ -43,5 +51,14 @@ public class DrinkMakerProtocol {
     public String sendMessage(String messageBody){
         String result = this.messageCode + separator + messageBody;
         return result;
-    }                
+    }             
+
+    public void setMoney(float balance) {
+        this.money = balance;
+    }   
+
+    public float getMoney() {
+        return money;
+    }        
+    
 }
