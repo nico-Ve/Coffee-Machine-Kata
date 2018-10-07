@@ -1,5 +1,6 @@
 package protocolTest;
 
+import coffee.machine.kata.Drink;
 import coffee.machine.kata.DrinkMakerProtocol;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -17,11 +18,18 @@ public class DrinkMakerProtocolTest {
     private static DrinkMakerProtocol dmp;
 
     public DrinkMakerProtocolTest() {
-    }
+    }       
       
     @Before
-    public void setUp() {
+    public void setUp() {  
         dmp = new DrinkMakerProtocol();
+        dmp.getOptions().put("tea", new Drink("T", 0.4f));
+        dmp.getOptions().put("chocolate", new Drink("H", 0.5f));
+        dmp.getOptions().put("coffee", new Drink("C", 0.6f));
+        dmp.getOptions().put("orange", new Drink("O", 0.6f, false, false));
+        dmp.setMessageCode("M");
+        dmp.setExtraHotCode("h");
+        dmp.setSeparator(":");    
         dmp.setMoney(1.65f);
     }
     
@@ -61,7 +69,7 @@ public class DrinkMakerProtocolTest {
     }   
     
     @Test
-    public void DrinkMakerProtocol_oneDrinkEnoughMoney_ExpectedMoneyWithdraw() {
+    public void DrinkMakerProtocol_oneDrinkEnoughMoney_ExpectedMoneyWithdraw() {        
         dmp.order("chocolate", 0);
         float result = dmp.getMoney();
         assertEquals(1.15f, result, 0);
@@ -94,11 +102,39 @@ public class DrinkMakerProtocolTest {
     }    
     
     
-    
+    // Iteration 4 tests--------------------------------------------------------
+    @Test
+    public void DrinkMakerProtocol_makingFiveValidOrders_ExpectedValidReporting() {
+        dmp.setMoney(10.5f); //setting enough money for five orders
+        dmp.order("coffee", 0);
+        dmp.order("coffee", 1, true);
+        dmp.order("orange", 0);
+        dmp.order("chocolate", 2); 
+        dmp.order("tea", 0, true);        
+        //assertEquals("drinks : 5; amount : 2.7", reporting.getTotalMoney());
+    }
 
+    @Test
+    public void DrinkMakerProtocol_makingTenValidAndInvalidOrders_ExpectedValidReporting() {
+        dmp.setMoney(10.5f); //setting enough money for four orders
+        dmp.order("coffee", 0);
+        dmp.order("coffee", 1, true);
+        dmp.order("orange", 0);
+        dmp.order("chocolate", 2); 
+        dmp.setMoney(0.4f); //setting enough money for one more order only
+        dmp.order("tea", 0, true);   
+        dmp.order("coffee", 0);
+        dmp.order("coffee", 1, true);
+        dmp.order("orange", 0);
+        dmp.order("chocolate", 2); 
+        dmp.order("tea", 0, true);   
+        //assertEquals("drinks : 5; amount : 2.7", reporting.getTotalMoney());
+    }
+    
+  
     @BeforeClass
     public static void setUpClass() {}    
-  
+    
     @AfterClass
     public static void tearDownClass() {}
 

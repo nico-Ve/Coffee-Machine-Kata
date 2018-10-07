@@ -9,21 +9,14 @@ import java.util.HashMap;
  */
 public class DrinkMakerProtocol {
     
-    private HashMap<String, Drink> optionsMap;
+    private HashMap<String, Drink> options;
     private String messageCode;
     private String extraHotCode;
     private String separator;    
     private float money;
 
     public DrinkMakerProtocol() {
-        this.optionsMap = new HashMap();
-        this.optionsMap.put("tea", new Drink("T", 0.4f));
-        this.optionsMap.put("chocolate", new Drink("H", 0.5f));
-        this.optionsMap.put("coffee", new Drink("C", 0.6f));
-        this.optionsMap.put("orange", new Drink("O", 0.6f, false, false));
-        this.messageCode = "M";
-        this.extraHotCode = "h";
-        this.separator = ":";
+        this.options = new HashMap();                
     }
     
     
@@ -32,8 +25,7 @@ public class DrinkMakerProtocol {
     }
     
     public String order(String optionName, int sugarAmout, boolean isExtraHot){
-        Drink option = this.optionsMap.get(optionName);
-        String optionCode = option.getCode();
+        Drink option = this.options.get(optionName);
              
         if (this.money < option.getPrice()){
             String messageBody = (option.getPrice()-this.money)+ " missing";
@@ -42,7 +34,7 @@ public class DrinkMakerProtocol {
         
         setMoney(this.money-option.getPrice());
         StringBuilder instruction = new StringBuilder();                
-        instruction.append(optionCode);
+        instruction.append(option.getCode());
         
         if(isExtraHot && option.isHot()){
             instruction.append(this.extraHotCode);
@@ -67,6 +59,38 @@ public class DrinkMakerProtocol {
         return result;
     }             
 
+    public HashMap<String, Drink> getOptions() {
+        return options;
+    }
+
+    public void setOptions(HashMap<String, Drink> options) {
+        this.options = options;
+    }     
+
+    public String getMessageCode() {
+        return messageCode;
+    }
+
+    public void setMessageCode(String messageCode) {
+        this.messageCode = messageCode;
+    }
+
+    public String getExtraHotCode() {
+        return extraHotCode;
+    }
+
+    public void setExtraHotCode(String extraHotCode) {
+        this.extraHotCode = extraHotCode;
+    }
+
+    public String getSeparator() {
+        return separator;
+    }
+
+    public void setSeparator(String separator) {
+        this.separator = separator;
+    }        
+    
     public void setMoney(float balance) {
         this.money = balance;
     }   
@@ -74,5 +98,6 @@ public class DrinkMakerProtocol {
     public float getMoney() {
         return money;
     }        
+    
     
 }
