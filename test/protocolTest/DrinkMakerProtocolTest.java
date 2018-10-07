@@ -34,6 +34,7 @@ public class DrinkMakerProtocolTest {
         dmp.setMoney(1.65f);
     }
 
+    
     // Iteration 1 tests--------------------------------------------------------
     @Test
     public void DrinkMakerProtocol_oneDrinkOneSugar_ExpectedStringFormat() {
@@ -82,6 +83,7 @@ public class DrinkMakerProtocolTest {
         assertEquals(1.15f, result, 0);
     }
 
+    
     // Iteration 3 tests--------------------------------------------------------
     @Test
     public void DrinkMakerProtocol_newDrinkNoSugar_ExpectedStringFormat() {
@@ -124,6 +126,13 @@ public class DrinkMakerProtocolTest {
         assertEquals(1.2f, dmp.getReportingRepository().getTotalMoney(), 0.005);
     }
 
+    
+    // Iteration 5 tests--------------------------------------------------------
+    @Test
+    public void DrinkMakerProtocol_orderEmptyDrink_ExpectedShortageMessage() {       
+        String result = dmp.order("tea", 1, true);        
+        assertEquals("M:there is a shortage on this drink, a notification has been sent to the company", result);
+    }
     
     
     @BeforeClass
