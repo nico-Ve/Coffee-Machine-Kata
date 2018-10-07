@@ -14,9 +14,12 @@ public class DrinkMakerProtocol {
     private String extraHotCode;
     private String separator;    
     private float money;
+    
+    private ReportingRepository reportingRepository;
 
     public DrinkMakerProtocol() {
-        this.options = new HashMap();                
+        this.options = new HashMap();   
+        this.reportingRepository = new ReportingRepository();
     }
     
     
@@ -50,9 +53,12 @@ public class DrinkMakerProtocol {
             instruction.append("2").append(this.separator).append("0");
         }
         
+        this.reportingRepository.addDrink(optionName);
+        this.reportingRepository.addMoney(option.getPrice());
         String result = instruction.toString();
         return result;        
     }
+    
     
     public String sendMessage(String messageBody){
         String result = this.messageCode + this.separator + messageBody;
@@ -98,6 +104,12 @@ public class DrinkMakerProtocol {
     public float getMoney() {
         return money;
     }        
+
+    public ReportingRepository getReportingRepository() {
+        return reportingRepository;
+    }        
     
-    
+    public void setReportingRepository() {
+        this.reportingRepository.setTotalDrinks(this.options);
+    }
 }
