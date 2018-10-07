@@ -11,7 +11,8 @@ public class DrinkMakerProtocol {
     
     private HashMap<String, Drink> optionsMap;
     private String messageCode;
-    private char separator;
+    private String extraHotCode;
+    private String separator;    
     private float money;
 
     public DrinkMakerProtocol() {
@@ -19,11 +20,18 @@ public class DrinkMakerProtocol {
         this.optionsMap.put("tea", new Drink("T", 0.4f));
         this.optionsMap.put("chocolate", new Drink("H", 0.5f));
         this.optionsMap.put("coffee", new Drink("C", 0.6f));
+        this.optionsMap.put("orange", new Drink("O", 0.6f, false, false));
         this.messageCode = "M";
-        this.separator = ':';
+        this.extraHotCode = "h";
+        this.separator = ":";
     }
     
+    
     public String order(String optionName, int sugarAmout){
+        return order(optionName, sugarAmout, false);
+    }
+    
+    public String order(String optionName, int sugarAmout, boolean isExtraHot){
         Drink option = this.optionsMap.get(optionName);
         String optionCode = option.getCode();
              
@@ -34,14 +42,20 @@ public class DrinkMakerProtocol {
         
         setMoney(this.money-option.getPrice());
         StringBuilder instruction = new StringBuilder();                
-        instruction.append(optionCode).append(separator);
+        instruction.append(optionCode);
         
-        if(sugarAmout <= 0){
-            instruction.append(separator);
+        if(isExtraHot && option.isHot()){
+            instruction.append(this.extraHotCode);
+        }
+        
+        instruction.append(this.separator);
+        
+        if(!option.hasSugar() || sugarAmout <= 0){
+            instruction.append(this.separator);
         } else if (sugarAmout == 1){
-            instruction.append("1").append(separator).append("0");
+            instruction.append("1").append(this.separator).append("0");
         } else {
-            instruction.append("2").append(separator).append("0");
+            instruction.append("2").append(this.separator).append("0");
         }
         
         String result = instruction.toString();
@@ -49,7 +63,7 @@ public class DrinkMakerProtocol {
     }
     
     public String sendMessage(String messageBody){
-        String result = this.messageCode + separator + messageBody;
+        String result = this.messageCode + this.separator + messageBody;
         return result;
     }             
 
