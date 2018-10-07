@@ -25,7 +25,7 @@ public class DrinkMakerProtocolTest {
         dmp.setMoney(1.65f);
     }
     
-    // Iteration 1 tests
+    // Iteration 1 tests--------------------------------------------------------
     @Test
     public void DrinkMakerProtocol_oneDrinkOneSugar_ExpectedStringFormat() {
         String result = dmp.order("tea", 1);
@@ -52,7 +52,7 @@ public class DrinkMakerProtocolTest {
     }
     
     
-    // Iteration 2 tests
+    // Iteration 2 tests--------------------------------------------------------
     @Test
     public void DrinkMakerProtocol_oneDrinkNotEnoughMoney_ExpectedMessageSend() {        
         dmp.setMoney(0.1f);
@@ -66,6 +66,33 @@ public class DrinkMakerProtocolTest {
         float result = dmp.getMoney();
         assertEquals(1.15f, result, 0);
     }
+    
+    
+    // Iteration 3 tests--------------------------------------------------------
+    @Test
+    public void DrinkMakerProtocol_newDrinkNoSugar_ExpectedStringFormat() {
+        String result = dmp.order("orange", 0);
+        assertEquals("O::", result);
+    }
+    
+    @Test
+    public void DrinkMakerProtocol_coldDrinkExtraHotAndSugarAttempt_ExpectedStringFormat() {
+        String result = dmp.order("orange", 1, true);
+        assertEquals("O::", result);
+    }
+    
+    @Test
+    public void DrinkMakerProtocol_extraHotDrinkNoSugar_ExpectedStringFormat() {
+        String result = dmp.order("chocolate", 0, true);
+        assertEquals("Hh::", result);
+    }   
+    
+    @Test
+    public void DrinkMakerProtocol_extraHotDrinkOneSugar_ExpectedStringFormat() {
+        String result = dmp.order("coffee", 1, true);
+        assertEquals("Ch:1:0", result);        
+    }    
+    
     
     
 
