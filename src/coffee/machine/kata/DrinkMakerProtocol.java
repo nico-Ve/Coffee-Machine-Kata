@@ -16,6 +16,8 @@ public class DrinkMakerProtocol {
     private float money;
     
     private ReportingRepository reportingRepository;
+    private BeverageQuantityChecker beverageQuantityChecker;
+    private EmailNotifier emailNotifier;
 
     public DrinkMakerProtocol() {
         this.options = new HashMap();   
@@ -32,7 +34,12 @@ public class DrinkMakerProtocol {
         
         if(option == null){
             return sendMessage("no drink available");
-        }        
+        } 
+        if(this.beverageQuantityChecker.isEmpty(optionName)){
+            this.emailNotifier.notifyMissingDrink(optionName);
+            return sendMessage("there is a shortage on this drink, a notification has been sent to the company");
+        
+        }
         if (this.money < option.getPrice()){
             String messageBody = (option.getPrice()-this.money)+ " missing";
             return sendMessage(messageBody);
@@ -115,4 +122,22 @@ public class DrinkMakerProtocol {
     public void setReportingRepository() {
         this.reportingRepository.setTotalDrinks(this.options);
     }
+
+    public BeverageQuantityChecker getBeverageQuantityChecker() {
+        return beverageQuantityChecker;
+    }
+
+    public void setBeverageQuantityChecker(BeverageQuantityChecker beverageQuantityChecker) {
+        this.beverageQuantityChecker = beverageQuantityChecker;
+    }
+
+    public EmailNotifier getEmailNotifier() {
+        return emailNotifier;
+    }
+
+    public void setEmailNotifier(EmailNotifier emailNotifier) {
+        this.emailNotifier = emailNotifier;
+    }
+    
+    
 }
