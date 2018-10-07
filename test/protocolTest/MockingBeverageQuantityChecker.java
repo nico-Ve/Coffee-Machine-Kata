@@ -15,14 +15,14 @@ import java.util.HashMap;
  */
 public class MockingBeverageQuantityChecker implements BeverageQuantityChecker{
     
-    private HashMap<String, Boolean> quantityList;
+    private HashMap<String, Boolean> quantityList;    
 
-    public MockingBeverageQuantityChecker() {
+    public MockingBeverageQuantityChecker(boolean stateCase) {
         this.quantityList = new HashMap();
-        this.quantityList.put("tea", false);
-        this.quantityList.put("coffee", false);
-        this.quantityList.put("chocolate", true);
-        this.quantityList.put("orange", false);
+        this.quantityList.put("tea", stateCase);
+        this.quantityList.put("coffee", stateCase);
+        this.quantityList.put("chocolate", stateCase);
+        this.quantityList.put("orange", stateCase);
     }
         
 
@@ -30,5 +30,10 @@ public class MockingBeverageQuantityChecker implements BeverageQuantityChecker{
     public boolean isEmpty(String drink) {
         return this.quantityList.get(drink);
     }
+
+    public HashMap<String, Boolean> getQuantityList() {
+        return quantityList;
+    }
+    
     
 }

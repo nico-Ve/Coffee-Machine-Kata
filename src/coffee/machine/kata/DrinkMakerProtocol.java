@@ -13,6 +13,8 @@ public class DrinkMakerProtocol {
     private String messageCode;
     private String extraHotCode;
     private String separator;    
+    private String nonExistingMessage;
+    private String shortageMessage;
     private float money;
     
     private ReportingRepository reportingRepository;
@@ -33,11 +35,11 @@ public class DrinkMakerProtocol {
         Drink option = this.options.get(optionName);
         
         if(option == null){
-            return sendMessage("no drink available");
+            return sendMessage(this.nonExistingMessage);
         } 
         if(this.beverageQuantityChecker.isEmpty(optionName)){
             this.emailNotifier.notifyMissingDrink(optionName);
-            return sendMessage("there is a shortage on this drink, a notification has been sent to the company");
+            return sendMessage(this.shortageMessage);
         
         }
         if (this.money < option.getPrice()){
@@ -105,7 +107,25 @@ public class DrinkMakerProtocol {
 
     public void setSeparator(String separator) {
         this.separator = separator;
-    }        
+    }   
+
+    public String getNonExistingMessage() {
+        return nonExistingMessage;
+    }
+
+    public void setNonExistingMessage(String nonExistingMessage) {
+        this.nonExistingMessage = nonExistingMessage;
+    }
+
+    public String getShortageMessage() {
+        return shortageMessage;
+    }
+
+    public void setShortageMessage(String shortageMessage) {
+        this.shortageMessage = shortageMessage;
+    }
+    
+    
     
     public void setMoney(float balance) {
         this.money = balance;
